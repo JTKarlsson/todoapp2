@@ -7,14 +7,14 @@ const PORT = process.env.PORT || 3000;
 
 const allowedHeaders = ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'];
 app.use(cors({
-    origin: '*',
+    origin: 'http://localhost:5173',
     allowedHeaders,
 }));
 
 app.use(express.json());
 
  const redis = new Redis({
-    host: 'localhost',
+    host: 'redis',
     port: 6379,
 });
 
@@ -64,7 +64,7 @@ app.get('/todos', (req, res) => {
 app.put('/todos/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const updatedTodo = req.body;
-    const index = todos.findIndex((t) => t.id === id);
+    const index = todos.findIndex((todo) => todo.id === id);
     if (index !== -1) {
         todos[index] = { ...todos[index], ...updatedTodo };
 
@@ -78,7 +78,7 @@ app.put('/todos/:id', (req, res) => {
 
 app.delete('/todos/:id', (req, res) => {
     const id = parseInt(req.params.id);
-    const index = todos.findIndex((t) => t.id === id);
+    const index = todos.findIndex((todo) => todo.id === id);
     if (index !== -1) {
         const deletedTodo = todos.splice(index, 1)[0];
 
